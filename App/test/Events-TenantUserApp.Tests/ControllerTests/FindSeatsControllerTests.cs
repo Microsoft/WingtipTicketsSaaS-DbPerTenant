@@ -38,8 +38,9 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             mockTenantRepo.Setup(r => r.AddTicketPurchase(GetTicketPurchaseModel(), 12345)).Returns(GetTicketId());
 
             var mockUtilities = new Mock<IUtilities>();
+            var mockLookupClient = new Mock<DnsClient.ILookupClient>();
 
-            _findSeatsController = new FindSeatsController(mockTenantRepo.Object, mockCatalogRepo.Object, localizer, baseLocalizer, logger, configuration);
+            _findSeatsController = new FindSeatsController(mockTenantRepo.Object, mockCatalogRepo.Object, localizer, baseLocalizer, logger, configuration, mockLookupClient.Object);
         }
 
         [Fact]
@@ -51,7 +52,6 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             Assert.NotNull(redirectToActionResult.ControllerName);
             Assert.Equal("Index", redirectToActionResult.ActionName);
             Assert.Equal("Events", redirectToActionResult.ControllerName);
-
         }
 
         [Fact]
@@ -73,7 +73,6 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             // Assert
             var contentResult = Assert.IsType<ContentResult>(result);
             Assert.Equal("290", contentResult.Content);
-
         }
 
         [Fact]

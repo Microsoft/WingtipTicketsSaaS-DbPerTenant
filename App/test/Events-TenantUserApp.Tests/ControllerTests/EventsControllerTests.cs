@@ -33,8 +33,9 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             mockTenantRepo.Setup(repo => repo.GetAllCountries(12345)).Returns(GetCountries());
             mockTenantRepo.Setup(repo => repo.GetEventsForTenant(12345)).Returns(GetEvents());
 
-            _eventsController = new EventsController(mockTenantRepo.Object, mockCatalogRepo.Object, baseLocalizer, logger, configuration);
+            var mockLookupClient = new Mock<DnsClient.ILookupClient>();
 
+            _eventsController = new EventsController(mockTenantRepo.Object, mockCatalogRepo.Object, baseLocalizer, logger, configuration, mockLookupClient.Object, mockUtilities.Object);
         }
 
         [Fact]
@@ -47,7 +48,6 @@ namespace Events_TenantUserApp.Tests.ControllerTests
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<IEnumerable<EventModel>>(viewResult.ViewData.Model);
             Assert.Equal(2, model.Count());
-
         }
 
         private async Task<TenantModel> GetTenantModel()
@@ -127,4 +127,3 @@ namespace Events_TenantUserApp.Tests.ControllerTests
         }
     }
 }
-
